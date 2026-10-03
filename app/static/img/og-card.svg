@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"
+     viewBox="0 0 1200 630" role="img"
+     aria-label="Trules Doniphane, Concepteur Développeur d'Applications">
+  <title>Trules Doniphane — Concepteur Développeur d'Applications</title>
+  <rect width="1200" height="630" fill="#0c1011"/>
+
+  <g>
+    <ellipse cx="980" cy="330" rx="150" ry="120" fill="none" stroke="#2b3435" stroke-width="1.4" opacity="0.90"/>
+    <ellipse cx="980" cy="330" rx="192" ry="154" fill="none" stroke="#2b3435" stroke-width="1.4" opacity="0.82"/>
+    <ellipse cx="980" cy="330" rx="235" ry="188" fill="none" stroke="#2b3435" stroke-width="1.4" opacity="0.74"/>
+    <ellipse cx="980" cy="330" rx="278" ry="222" fill="none" stroke="#2b3435" stroke-width="1.4" opacity="0.66"/>
+    <ellipse cx="980" cy="330" rx="320" ry="256" fill="none" stroke="#2b3435" stroke-width="1.4" opacity="0.58"/>
+    <ellipse cx="980" cy="330" rx="362" ry="290" fill="none" stroke="#2b3435" stroke-width="1.4" opacity="0.50"/>
+    <ellipse cx="980" cy="330" rx="405" ry="324" fill="none" stroke="#2b3435" stroke-width="1.4" opacity="0.42"/>
+    <ellipse cx="980" cy="330" rx="448" ry="358" fill="none" stroke="#2b3435" stroke-width="1.4" opacity="0.34"/>
+    <ellipse cx="980" cy="330" rx="490" ry="392" fill="none" stroke="#2b3435" stroke-width="1.4" opacity="0.26"/>
+  </g>
+
+  <circle cx="104" cy="98" r="30" fill="none" stroke="#2b3435" stroke-width="2"/>
+  <text x="104" y="107" text-anchor="middle" fill="#e9ede6"
+        font-family="Georgia, serif" font-size="26" font-weight="700"
+        font-style="italic">DT</text>
+
+  <text x="64" y="300" fill="#e9ede6" font-family="Georgia, serif"
+        font-size="86" font-weight="700" font-style="italic">Trules Doniphane</text>
+
+  <text x="64" y="366" fill="#e9ede6" font-family="Helvetica, Arial, sans-serif"
+        font-size="40">Concepteur Développeur d'Applications</text>
+
+  <rect x="64" y="424" width="86" height="4" fill="#ef5c9c"/>
+
+  <text x="64" y="492" fill="#9ba59e" font-family="Menlo, monospace"
+        font-size="26" letter-spacing="1">Python · Flask · Jinja2 · HTMX</text>
+
+  <text x="64" y="560" fill="#9ba59e" font-family="Helvetica, Arial, sans-serif"
+        font-size="24">La Réunion · France</text>
+</svg>

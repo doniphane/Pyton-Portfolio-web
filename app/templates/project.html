@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} — {{ profile.full_name }}{% endblock %}
+{% block description %}{{ project.summary }}{% endblock %}
+
+{% block rail %}
+<aside class="rail" aria-label="Navigation">
+  <a class="rail__mark" href="/" aria-label="Retour à l'accueil">
+    <span aria-hidden="true">{{ profile.initials }}</span>
+  </a>
+  <nav class="rail__nav">
+    <a class="rail__link" href="/#projets" title="Tous les projets">
+      {{ icon('chevron-left', size=19) }}
+      <span class="rail__label">Projets</span>
+    </a>
+  </nav>
+  <button type="button" class="rail__theme" data-theme-toggle
+          aria-live="polite" title="Changer de thème">
+    {{ theme_icons }}
+    <span class="sr-only" data-theme-label>Passer en thème sombre</span>
+  </button>
+</aside>
+{% endblock %}
+
+{% block content %}
+<main id="contenu" class="project-page">
+  <p class="project-page__back">
+    <a href="/#projets">{{ icon('arrow-left', size=16) }} Retour aux projets</a>
+  </p>
+
+  <div id="fiche-projet" class="fiche-zone">
+    {% include "partials/project_detail.html" %}
+  </div>
+
+  <nav class="project-page__siblings" aria-label="Projets voisins">
+    {% set siblings = sorted_projects %}
+    {% set index = siblings.index(project) %}
+    {% if index > 0 %}
+      {% set previous = siblings[index - 1] %}
+      <a class="sibling sibling--prev" href="/projets/{{ previous.slug }}">
+        <span class="sibling__label">Précédent</span>
+        <span class="sibling__title">{{ previous.title }}</span>
+      </a>
+    {% endif %}
+    {% if index < siblings|length - 1 %}
+      {% set next_project = siblings[index + 1] %}
+      <a class="sibling sibling--next" href="/projets/{{ next_project.slug }}">
+        <span class="sibling__label">Suivant</span>
+        <span class="sibling__title">{{ next_project.title }}</span>
+      </a>
+    {% endif %}
+  </nav>
+</main>
+{% endblock %}

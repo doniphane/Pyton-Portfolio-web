@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Erreur serveur — {{ profile.full_name }}{% endblock %}
+
+{% block content %}
+<main id="contenu" class="error-page">
+  <p class="error-page__code" aria-hidden="true">500</p>
+  <h1 class="error-page__title">Quelque chose a cassé côté serveur</h1>
+  <p class="error-page__text">
+    L'erreur est enregistrée, je la corrigerai. En attendant, l'accueil et le
+    catalogue des projets fonctionnent normalement.
+  </p>
+  <div class="error-page__actions">
+    <a class="btn btn--primary" href="/">
+      {{ icon('arrow-left', size=18) }} Retour à l'accueil
+    </a>
+  </div>
+</main>
+{% endblock %}

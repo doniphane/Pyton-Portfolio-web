@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Page introuvable — {{ profile.full_name }}{% endblock %}
+
+{% block content %}
+<main id="contenu" class="error-page">
+  <p class="error-page__code" aria-hidden="true">404</p>
+  <h1 class="error-page__title">Cette page n'existe pas</h1>
+  <p class="error-page__text">
+    Le lien est peut-être ancien, ou l'adresse comporte une coquille.
+    Le catalogue, lui, est toujours à sa place.
+  </p>
+  <div class="error-page__actions">
+    <a class="btn btn--primary" href="/">
+      {{ icon('arrow-left', size=18) }} Retour à l'accueil
+    </a>
+    <a class="btn btn--ghost" href="/#projets">
+      {{ icon('layers', size=18) }} Voir les projets
+    </a>
+  </div>
+</main>
+{% endblock %}

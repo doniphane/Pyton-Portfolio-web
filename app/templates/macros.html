@@ -1,0 +1,124 @@
+{# Macros partagées : en-tête de section, pastilles de technos, liens, carte projet.
+
+   À importer avec « with context » : les macros utilisent `icon`, qui vient
+   du processeur de contexte de l'application et n'est pas visible sinon.
+   #}
+
+{% macro stats(items) %}
+  {#- Chiffres à balayer d'un coup d'œil. Rendu sans boîte ni filet : ce sont
+      des repères éditoriaux, pas un composant d'interface. -#}
+  <dl class="stats">
+    {% for stat in items %}
+      <div class="stat">
+        <dd class="stat__value">{{ stat.value }}</dd>
+        <dt class="stat__label">{{ stat.label }}</dt>
+      </div>
+    {% endfor %}
+  </dl>
+{% endmacro %}
+
+
+{% macro section_head(number, anchor, title, lede=None, aside=None) %}
+  <header class="section-head">
+    <p class="section-head__index" aria-hidden="true">{{ number }}</p>
+    <div class="section-head__body">
+      <h2 class="section-head__title" id="titre-{{ anchor }}">{{ title }}</h2>
+      {% if lede %}<p class="section-head__lede">{{ lede }}</p>{% endif %}
+    </div>
+    {% if aside %}<div class="section-head__aside">{{ aside }}</div>{% endif %}
+  </header>
+{% endmacro %}
+
+
+{% macro skill_bands(groups) %}
+  {#- Compétences en bandeaux : un bandeau pleine largeur par groupe, tous
+      visibles. La grille à onglets masquait deux groupes sur trois et leur
+      imposait de cliquer pour les découvrir. -#}
+  <div class="bands">
+    {% for group in groups %}
+      <section class="band" aria-labelledby="band-{{ group.key }}">
+        <header class="band__head">
+          <h3 class="band__title" id="band-{{ group.key }}">{{ group.label }}</h3>
+          <p class="band__count">{{ group.skills|length }} compétences</p>
+          <p class="band__summary">{{ group.summary }}</p>
+        </header>
+
+        {#- Compétences en liste dense : le nom seul, sans description ni
+            année. Vingt-trois paragraphes ne servaient à rien ici — le niveau,
+            lui, reste montré par la barre. -#}
+        <ul class="band__list">
+          {% for skill in group.skills %}
+            <li class="skill" style="--niveau: {{ skill.level }}">
+              <h4 class="skill__name">{{ skill.name }}</h4>
+              <p class="skill__level">
+                <span class="sr-only">Niveau {{ skill.level }} sur 3</span>
+              </p>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+
+{% macro tech_pills(items, label='Technologies') %}
+  {% if items %}
+    <ul class="pills" aria-label="{{ label }}">
+      {% for tech in items %}
+        <li class="pill">{{ tech }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
+
+
+{% macro external_link(url, label, icon_name) %}
+  <a class="icon-link" href="{{ url }}" target="_blank" rel="noopener noreferrer"
+     title="{{ label }} — {{ url|domain }}">
+    {{ icon(icon_name, size=17) }}
+    <span>{{ label }}</span>
+  </a>
+{% endmacro %}
+
+
+{% macro project_card(project) %}
+  <article class="card" id="carte-{{ project.slug }}" data-slug="{{ project.slug }}">
+    <div class="card__frame">
+      {% if project.image %}
+        <img class="card__image" src="{{ url_for('static', filename='img/' ~ project.image) }}"
+             alt="Aperçu du projet {{ project.title }}" loading="lazy" decoding="async"
+             width="1000" height="640">
+      {% else %}
+        <div class="card__image card__image--empty" aria-hidden="true">
+          {{ icon('code', size=28) }}
+        </div>
+      {% endif %}
+      <p class="card__badge card__badge--{{ project.status }}">
+        <span class="dot" aria-hidden="true"></span>{{ project.status_label }}
+      </p>
+    </div>
+
+    <div class="card__body">
+      <p class="card__meta">
+        <time datetime="{{ project.date.isoformat() }}">{{ project.date|month_year }}</time>
+      </p>
+      <h3 class="card__title">
+        {#- Vrai lien : sans JavaScript il ouvre la page projet complète ; avec
+            HTMX il injecte la fiche sous la grille (voir hx-get). -#}
+        <a href="{{ url_for('main.project_page', slug=project.slug) }}"
+           hx-get="{{ url_for('main.partial_project_detail', slug=project.slug) }}"
+           hx-target="#modal-projet .modal__body"
+           hx-swap="innerHTML"
+           data-project-link>{{ project.title }}</a>
+      </h3>
+      <p class="card__summary">{{ project.summary }}</p>
+      {{ tech_pills(project.technologies) }}
+    </div>
+  </article>
+{% endmacro %}
+
+
+{% macro status_label(status) %}
+  {% if status == 'actif' %}En ligne{% else %}Archivé{% endif %}
+{% endmacro %}

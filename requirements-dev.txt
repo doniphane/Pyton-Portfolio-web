@@ -1,0 +1,5 @@
+-r requirements.txt
+
+# Développement : rechargement à chaud, tests, vérification de style
+pytest==8.3.4
+ruff==0.8.4

@@ -1,0 +1,69 @@
+{# Fiche projet injectée sous la grille par HTMX (ou rendue seule par
+   la page projet complète). Partage le même balisage. #}
+{% import "macros.html" as ui with context %}
+
+<article class="fiche" data-slug="{{ project.slug }}">
+  <header class="fiche__head">
+    <p class="fiche__meta">
+      <time datetime="{{ project.date.isoformat() }}">{{ project.date|month_year }}</time>
+      <span class="fiche__status fiche__status--{{ project.status }}">{{ project.status_label }}</span>
+    </p>
+    <h2 class="fiche__title">{{ project.title }}</h2>
+    <p class="fiche__summary">{{ project.summary }}</p>
+    {{ ui.tech_pills(project.technologies) }}
+  </header>
+
+  {% if project.image %}
+    {#- Ici la capture est rendue entière : c'est le seul endroit où l'on peut
+        la voir sans être rogné par le cadre de la carte. -#}
+    <figure class="fiche__shot">
+      <img src="{{ url_for('static', filename='img/' ~ project.image) }}"
+           alt="Capture d'écran du projet {{ project.title }}"
+           loading="lazy" decoding="async" width="1000">
+      <figcaption>Capture d'écran — {{ project.title }}</figcaption>
+    </figure>
+  {% endif %}
+
+  {% if project.links %}
+    <ul class="fiche__links">
+      {% for label, url, icon_name in project.links %}
+        <li>{{ ui.external_link(url, label, icon_name) }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if project.versions %}
+    <section class="versions" aria-label="Historique des versions">
+      <h3 class="subhead">Historique</h3>
+      <ol class="versions__list">
+        {% for version in project.versions %}
+          <li class="version">
+            <div class="version__head">
+              <span class="version__label">{{ version.label }}</span>
+              <time datetime="{{ version.date.isoformat() }}">{{ version.date|month_year }}</time>
+            </div>
+            <ul class="version__changes">
+              {% for change in version.changes %}
+                <li>{{ change }}</li>
+              {% endfor %}
+            </ul>
+            {% if version.technologies %}
+              {{ ui.tech_pills(version.technologies, 'Technologies de cette version') }}
+            {% endif %}
+            <ul class="version__links">
+              {% if version.url %}
+                <li>{{ ui.external_link(version.url, 'Site', 'external') }}</li>
+              {% endif %}
+              {% if version.repo %}
+                <li>{{ ui.external_link(version.repo, 'Code', 'github') }}</li>
+              {% endif %}
+              {% if version.video %}
+                <li>{{ ui.external_link(version.video, 'Vidéo', 'play') }}</li>
+              {% endif %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+  {% endif %}
+</article>

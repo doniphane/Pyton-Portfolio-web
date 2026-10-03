@@ -1,0 +1,59 @@
+{# Grille de projets filtrée — c'est ce fragment que HTMX remplace. #}
+{% import "macros.html" as ui with context %}
+
+{#- Le compteur vit ici, et non dans le formulaire : il doit être rafraîchi
+    par le même échange de fragment que la grille. -#}
+<p class="filters__count" role="status" aria-live="polite">
+  <strong>{{ total }}</strong> projet{{ 's' if total > 1 else '' }}
+  {%- if total != total_all %} sur {{ total_all }}{% endif %}
+</p>
+
+{% if projects %}
+  <div class="grid__inner">
+    {% for project in projects %}
+      {{ ui.project_card(project) }}
+    {% endfor %}
+  </div>
+
+  {% if pages > 1 %}
+    <nav class="pagination" aria-label="Pages de projets">
+      {% set base = {'status': filters.status, 'year': filters.year, 'tech': filters.tech} %}
+      {% if page > 1 %}
+        <a class="pagination__step"
+           href="?{{ dict(base, page=page-1)|urlencode }}"
+           hx-get="{{ url_for('main.partial_projects') }}?{{ dict(base, page=page-1)|urlencode }}"
+           hx-target="#grille-projets" hx-swap="innerHTML"
+           hx-indicator="#chargement-projets" rel="prev">
+          {{ icon('chevron-left', size=16) }} Précédent
+        </a>
+      {% else %}<span class="pagination__step is-off">{{ icon('chevron-left', size=16) }} Précédent</span>{% endif %}
+
+      <p class="pagination__status">Page {{ page }} sur {{ pages }}</p>
+
+      {% if page < pages %}
+        <a class="pagination__step"
+           href="?{{ dict(base, page=page+1)|urlencode }}"
+           hx-get="{{ url_for('main.partial_projects') }}?{{ dict(base, page=page+1)|urlencode }}"
+           hx-target="#grille-projets" hx-swap="innerHTML"
+           hx-indicator="#chargement-projets" rel="next">
+          Suivant {{ icon('chevron-right', size=16) }}
+        </a>
+      {% else %}<span class="pagination__step is-off">Suivant {{ icon('chevron-right', size=16) }}</span>{% endif %}
+    </nav>
+  {% endif %}
+
+{% else %}
+  {#- Pas une erreur : une invitation à retirer un filtre. -#}
+  <div class="empty">
+    <p class="empty__title">Aucun projet ne correspond à ces filtres.</p>
+    <p class="empty__text">
+      Ils sont peut-être trop restrictifs — retirez-en un pour élargir la recherche.
+    </p>
+    <a class="btn btn--ghost" href="/#projets"
+       hx-get="{{ url_for('main.partial_projects') }}"
+       hx-target="#grille-projets" hx-swap="innerHTML"
+       hx-indicator="#chargement-projets">
+      Réinitialiser les filtres
+    </a>
+  </div>
+{% endif %}

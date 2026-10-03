@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="{{ theme_default }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% block title %}{{ profile.full_name }} — {{ profile.role }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ profile.tagline }}{% endblock %}">
+  <meta name="author" content="{{ profile.full_name }}">
+  <meta name="theme-color" content="#EFF2ED" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0D1112" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="{{ profile.full_name }} — {{ profile.role }}">
+  <meta property="og:description" content="{{ profile.tagline }}">
+  <meta property="og:url" content="{{ site_url }}{{ current_path }}">
+  <meta property="og:image" content="{{ site_url }}/static/img/og-card.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon-180.webp') }}" type="image/webp">
+  <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fonts.css') }}?v=2">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3">
+
+  {#- Applique le thème avant le premier rendu : évite le flash blanc. -#}
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (e) {}
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (prefersDark ? 'dark' : 'light');
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  {% block rail %}
+  <aside class="rail" aria-label="Navigation principale">
+    <a class="rail__mark" href="/" aria-label="Retour à l'accueil">
+      <span aria-hidden="true">{{ profile.initials }}</span>
+    </a>
+
+    <nav class="rail__nav">
+      <ul class="rail__list">
+        {% for item in rail_items %}
+          <li>
+            <a href="#{{ item.id }}"
+               class="rail__link{% if loop.index0 == 0 %} is-active{% endif %}"
+               data-rail-link="{{ item.id }}">
+              {{ icon(item.icon, size=19) }}
+              <span class="rail__label">{{ item.label }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <button type="button" class="rail__theme" data-theme-toggle
+            aria-live="polite" title="Changer de thème">
+      {{ theme_icons }}
+      <span class="sr-only" data-theme-label>Passer en thème sombre</span>
+    </button>
+  </aside>
+  {% endblock %}
+
+  {#- Sous 62 rem le rail disparaît : le sélecteur de thème doit rester
+      accessible, sinon le thème clair est le seul possible sur téléphone. -#}
+  <button type="button" class="theme-fab" data-theme-toggle
+          aria-live="polite" title="Changer de thème">
+    {{ theme_icons }}
+    <span class="sr-only" data-theme-label>Passer en thème sombre</span>
+  </button>
+
+  <div class="shell">
+    {% block content %}{% endblock %}
+  </div>
+
+  <script src="{{ url_for('static', filename='vendor/htmx.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=2" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

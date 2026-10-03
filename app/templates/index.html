@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+{% import "macros.html" as ui with context %}
+
+{#- Construit une fois, appelé dans l'en-tête de la section « À propos ». -#}
+{% set stats_markup = ui.stats(stats) %}
+
+{% block description %}{{ profile.tagline }} Portfolio de {{ profile.full_name }}, {{ profile.role }} à {{ profile.location }}.{% endblock %}
+
+{% block content %}
+<main id="contenu">
+
+  {# ══════════════════════════════ HERO ══════════════════════════════ #}
+  <section class="hero" id="accueil">
+    <div class="hero__terrain" aria-hidden="true">
+      <img src="{{ url_for('static', filename='img/topography.svg') }}" alt="" width="1600" height="1000">
+    </div>
+
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <p class="hero__eyebrow">
+          <span class="hero__eyebrow-dot" aria-hidden="true"></span>
+          Disponible pour un projet
+        </p>
+
+        <h1 class="hero__title">
+          <span class="hero__name">{{ profile.full_name }}</span>
+          <span class="hero__role" data-roles
+                data-roles-list="{{ profile.roles|join('|||') }}">{{ profile.role }}</span>
+        </h1>
+
+        <p class="hero__tagline">{{ profile.tagline }}</p>
+
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#projets">
+            {{ icon('layers', size=18) }} Voir les projets
+          </a>
+          <a class="btn btn--ghost" href="mailto:{{ profile.email }}">
+            {{ icon('mail', size=18) }} Écrire
+          </a>
+          <a class="btn btn--ghost" href="{{ url_for('static', filename='cv.pdf') }}"
+             download="{{ profile.cv_filename }}">
+            {{ icon('download', size=18) }} CV
+          </a>
+        </div>
+
+        <ul class="hero__socials" aria-label="Réseaux et contact">
+          {% for social in socials %}
+            <li>
+              <a class="social" href="{{ social.url }}"
+                 {% if social.url.startswith('mailto:') %}{% else %}target="_blank" rel="noopener noreferrer"{% endif %}
+                 title="{{ social.label }}">
+                {{ icon(social.icon, size=18) }}
+                <span class="sr-only">{{ social.label }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      {#- Monogramme décoratif — le nom est déjà en texte juste au-dessus. Il
+          découpe un morceau des courbes de niveau pour relier les deux. -#}
+      <div class="hero__mark" aria-hidden="true">
+        <img class="hero__mark-terrain" src="{{ url_for('static', filename='img/topography.svg') }}"
+             alt="" width="1600" height="1000">
+        <span class="hero__mark-initials">{{ profile.initials }}</span>
+      </div>
+    </div>
+
+    <div class="hero__foot">
+      <p class="hero__coords">
+        <span>20°53′S</span><span>55°17′E</span><span>{{ profile.location }}</span>
+      </p>
+      <a class="hero__scroll" href="#a-propos">
+        <span>Défiler</span>{{ icon('arrow-down', size=16) }}
+      </a>
+    </div>
+  </section>
+
+  {# ═════════════════════════════ À PROPOS ═════════════════════════════ #}
+  <section class="section" id="a-propos" aria-labelledby="titre-a-propos">
+    {{ ui.section_head(
+      '01', 'a-propos', 'À propos',
+      "Reconverti de l'électronique au développement, voici mon parcours, "
+      "ce que je sais faire et ce qui me motive.",
+      aside=stats_markup
+    ) }}
+
+    <div class="about">
+      <div class="about__bio">
+        {% for paragraph in profile.bio %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+      </div>
+
+      {#- Informations pratiques : elles répondent à des questions que le
+          recruteur se pose toujours (où, quand, langues) et n'ont rien à faire
+          dans le récit. -#}
+      <dl class="facts">
+        {% for fact in facts %}
+          <div class="fact">
+            <dt class="fact__label">
+              <span class="fact__icon">{{ icon(fact.icon, size=16) }}</span>
+              {{ fact.label }}
+            </dt>
+            <dd class="fact__value">{{ fact.value }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+    </div>
+
+    {#- Le parcours occupe toute la largeur : quatre formations avec leur
+        description demandent plus de place que la colonne étroite ne pouvait
+        en offrir. -#}
+    <section class="journey" aria-labelledby="titre-parcours">
+      <h3 class="subhead" id="titre-parcours">Parcours</h3>
+      <ol class="timeline">
+        {% for step in journey %}
+          <li class="timeline__item">
+            <p class="timeline__meta">
+              <span class="timeline__years">{{ step.years }}</span>
+              <span class="timeline__level timeline__level--{{ step.level_rank }}">{{ step.level }}</span>
+            </p>
+            <h4 class="timeline__title">{{ step.title }}</h4>
+            {% if step.place %}<p class="timeline__place">{{ step.place }}</p>{% endif %}
+            <p class="timeline__desc">{{ step.description }}</p>
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section class="passions" aria-labelledby="titre-passions">
+      <h3 class="subhead" id="titre-passions">En dehors du code</h3>
+      <div class="passions__grid">
+        {% for passion in passions %}
+          <article class="passion">
+            <h4 class="passion__title">{{ passion.title }}</h4>
+            <p class="passion__desc">{{ passion.description }}</p>
+            {{ ui.tech_pills(passion.tags, 'Mots-clés') }}
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  </section>
+
+  {# ═══════════════════════════ COMPÉTENCES ═══════════════════════════ #}
+  <section class="section section--tint" id="competences" aria-labelledby="titre-competences">
+    {{ ui.section_head('02', 'competences', 'Compétences',
+       "Du balisage au serveur : la stack que j'utilise au quotidien, regroupée par rôle.") }}
+
+    {#- Les trois groupes sont rendus d'un bloc : rien n'est caché derrière un
+        onglet, et la section reste lisible sans JavaScript ni requête. -#}
+    {{ ui.skill_bands(skill_groups) }}
+  </section>
+
+  {# ══════════════════════════════ PROJETS ══════════════════════════════ #}
+  <section class="section" id="projets" aria-labelledby="titre-projets">
+    {{ ui.section_head('03', 'projets', 'Projets', None) }}
+
+    <p class="section__lede">
+      {{ total_all }} projets, du premier script JavaScript aux applications
+      complètes. Chaque carte s'ouvre sur le détail et l'historique des versions.
+    </p>
+
+    {#- Filtres : formulaire GET classique, rechargé par HTMX.
+        Pas de hx-push-url ici : c'est la réponse du serveur qui pousse l'URL
+        canonique via l'en-tête HX-Push-Url, pour ne pas exposer l'adresse
+        interne du fragment dans la barre du navigateur. -#}
+    <form class="filters" id="filtres"
+          hx-get="{{ url_for('main.partial_projects') }}"
+          hx-target="#grille-projets"
+          hx-swap="innerHTML"
+          hx-indicator="#chargement-projets"
+          data-filters>
+      <fieldset class="filters__group">
+        <legend class="filters__legend">Statut</legend>
+        <div class="segmented" role="group">
+          {% for value, label in status_filters %}
+            <button type="submit" name="status" value="{{ value }}"
+                    class="segmented__item{{ _selected([filters.status], value) }}"
+                    {% if filters.status == value %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}>
+              {{ label }}
+            </button>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <fieldset class="filters__group">
+        <legend class="filters__legend">Année</legend>
+        <div class="segmented" role="group">
+          <button type="submit" name="year" value="all"
+                  class="segmented__item{{ _selected([filters.year], 'all') }}"
+                  aria-pressed="{{ 'true' if filters.year == 'all' else 'false' }}">Toutes</button>
+          {% for year in years %}
+            <button type="submit" name="year" value="{{ year }}"
+                    class="segmented__item{{ _selected([filters.year], year) }}"
+                    aria-pressed="{{ 'true' if filters.year == year else 'false' }}">{{ year }}</button>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <fieldset class="filters__group filters__group--wide">
+        <legend class="filters__legend">Technologie</legend>
+        <div class="chips" role="group">
+          <button type="submit" name="tech" value="all"
+                  class="chip{{ _selected([filters.tech], 'all') }}"
+                  aria-pressed="{{ 'true' if filters.tech == 'all' else 'false' }}">Toutes</button>
+          {% for tech in techs %}
+            <button type="submit" name="tech" value="{{ tech }}"
+                    class="chip{{ _selected([filters.tech], tech) }}"
+                    aria-pressed="{{ 'true' if filters.tech == tech else 'false' }}">{{ tech }}</button>
+          {% endfor %}
+        </div>
+      </fieldset>
+    </form>
+
+    <div id="chargement-projets" class="loader" aria-hidden="true">
+      <span class="loader__bar"></span>
+    </div>
+
+    <div id="grille-projets" class="grid" aria-live="polite">
+      {% include "partials/projects_grid.html" %}
+    </div>
+  </section>
+
+  {# ══════════════════════════════ CONTACT ══════════════════════════════ #}
+  <section class="section section--tint" id="contact" aria-labelledby="titre-contact">
+    {{ ui.section_head('04', 'contact', 'Contact', None) }}
+
+    <div class="contact">
+      <div class="contact__pitch">
+        <h3 class="contact__title">Un projet en tête&nbsp;?</h3>
+        <p class="contact__text">
+          Sites, applications web, automatisations ou scripts Python&nbsp;:
+          écrivez-moi, je réponds rapidement. Travail à distance partout en France
+          et dans les territoires d'outre-mer.
+        </p>
+        <a class="btn btn--primary btn--lg"
+           href="mailto:{{ profile.email }}?subject=Demande%20de%20projet">
+          {{ icon('mail', size=18) }} Écrire à {{ profile.email.split('@')[0] }}
+        </a>
+      </div>
+
+      <ul class="contact__list">
+        {% for social in socials %}
+          <li>
+            <a class="contact__item" href="{{ social.url }}"
+               {% if social.url.startswith('mailto:') %}{% else %}target="_blank" rel="noopener noreferrer"{% endif %}>
+              <span class="contact__icon">{{ icon(social.icon, size=18) }}</span>
+              <span class="contact__text">
+                <span class="contact__label">{{ social.label }}</span>
+                <span class="contact__value">{{ social.value }}</span>
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+        <li>
+          <a class="contact__item" href="{{ url_for('static', filename='cv.pdf') }}"
+             download="{{ profile.cv_filename }}">
+            <span class="contact__icon">{{ icon('file-text', size=18) }}</span>
+            <span class="contact__text">
+              <span class="contact__label">Curriculum</span>
+              <span class="contact__value">{{ profile.cv_filename }}</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p class="footer__legal">
+      © {{ current_year }} {{ profile.full_name }} — {{ profile.location }}.
+    </p>
+  </footer>
+
+  {#- Modale projet : la fiche détaillée est injectée ici par HTMX. -#}
+  <dialog id="modal-projet" class="modal" aria-label="Détail du projet">
+    <button class="modal__close" type="button" data-modal-close aria-label="Fermer">
+      {{ icon('x', size=18) }}
+    </button>
+    <div class="modal__body"></div>
+  </dialog>
+
+</main>
+{% endblock %}

@@ -1,0 +1,2161 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Portfolio — Doniphane Trules
+   Feuille de style unique, sans framework.
+
+   Palette inspirée de La Réunion : basalte volcanique, cendre, lagon et
+   bougainvillea. Trois familles : Bricolage Grotesque (titres),
+   Instrument Sans (texte), Spline Sans Mono (données).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Jetons ───────────────────────────────────────────────────────────────
+
+   Le thème est posé par un script en ligne dans <head>, avant le premier
+   rendu : il n'y a donc qu'une source de vérité, l'attribut data-theme, et
+   pas de doublon à maintenir entre « média » et « attribut ».
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+
+  /* Rôles — thème clair */
+  --bg: #eef1ec;
+  --bg-tint: #e4e8e1;
+  --surface: #f7f9f5;
+  --surface-2: #fdfefb;
+  --border: #d3d9d0;
+  --border-strong: #7f857c;
+  --text: #101617;
+  --text-muted: #566059;
+  --text-faint: #5b635e;
+  --accent: #a81055;
+  --accent-hover: #c81a68;
+  --accent-on: #fff;
+  --accent-wash: #fbe9f1;
+  /* Ambiance du hero uniquement : la lueur de lave. Volontairement
+     distincte de --accent, qui reste le bougainvillea des contrôles. */
+  --lava: #c05621;
+  --link: #0b6b73;
+  --link-hover: #0e838d;
+  /* Lavis des pastilles de niveau d'étude */
+  --badge-1-bg: #e4e8e1;
+  --badge-1-fg: #4c554f;
+  --badge-2-bg: #d7ebec;
+  --badge-2-fg: #0b6b73;
+  --badge-3-bg: #fbe9f1;
+  --badge-3-fg: #a81055;
+  --ok: #226139;
+  --ok-wash: #dff0e5;
+  --focus: #a81055;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Rôles — thème sombre : mêmes noms, valeurs basaltiques et plus saturées */
+  --bg: #0c1011;
+  --bg-tint: #111617;
+  --surface: #151b1c;
+  --surface-2: #1a2122;
+  --border: #262f30;
+  --border-strong: #586a6b;
+  --text: #e9ede6;
+  --text-muted: #9ba59e;
+  --text-faint: #8a948c;
+  --accent: #ef5c9c;
+  --accent-hover: #f478ac;
+  --accent-on: #14060c;
+  --accent-wash: #2b1220;
+  --lava: #ff8f45;
+  --link: #4ec4cb;
+  /* Lavis des pastilles de niveau d'étude */
+  --badge-1-bg: #232b2c;
+  --badge-1-fg: #b6bfb8;
+  --badge-2-bg: #0f2b2e;
+  --badge-2-fg: #4ec4cb;
+  --badge-3-bg: #2b1220;
+  --badge-3-fg: #ef5c9c;
+  --link-hover: #7ad6db;
+  --ok: #59c48a;
+  --ok-wash: #12291d;
+  --focus: #ef5c9c;
+}
+
+:root {
+  /* Typographie */
+  --font-display: 'Bricolage Grotesque', 'Trebuchet MS', sans-serif;
+  --font-body: 'Instrument Sans', 'Helvetica Neue', system-ui, sans-serif;
+  --font-mono: 'Spline Sans Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Échelle fluide */
+  --step--1: clamp(0.82rem, 0.8rem + 0.1vw, 0.88rem);
+  --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.09rem);
+  --step-1: clamp(1.2rem, 1.13rem + 0.35vw, 1.45rem);
+  --step-2: clamp(1.45rem, 1.3rem + 0.7vw, 1.95rem);
+  --step-3: clamp(1.8rem, 1.5rem + 1.4vw, 2.8rem);
+  --step-4: clamp(2.3rem, 1.6rem + 3.2vw, 4.2rem);
+
+  /* Rythme */
+  --rail-w: 4.5rem;
+  --gutter: clamp(1.25rem, 0.6rem + 3vw, 3.5rem);
+  --measure: 34rem;
+  --radius: 0.5rem;
+  --radius-lg: 0.85rem;
+  --ease: cubic-bezier(0.32, 0.72, 0.24, 1);
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: color-mix(in oklab, currentColor 30%, transparent);
+  text-underline-offset: 0.22em;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+ul, ol {
+  padding: 0;
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--accent);
+  color: var(--accent-on);
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 0.2s var(--ease);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ── Chrome : rail de navigation ────────────────────────────────────────── */
+
+.rail {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: 50;
+  width: var(--rail-w);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  border-inline-end: 1px solid var(--border);
+}
+
+.shell {
+  padding-inline-start: 0;
+}
+
+@media (min-width: 62rem) {
+  .rail {
+    display: flex;
+  }
+
+  .shell {
+    padding-inline-start: var(--rail-w);
+  }
+}
+
+.rail__mark {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.rail__mark:hover {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.rail__nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.rail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.rail__link {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius);
+  color: var(--text-faint);
+  text-decoration: none;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.rail__link:hover {
+  color: var(--text);
+  background: var(--bg-tint);
+}
+
+/* Le trait à gauche marque la section courante. */
+.rail__link.is-active {
+  color: var(--accent);
+}
+
+.rail__link.is-active::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -1.15rem;
+  width: 2px;
+  height: 1.35rem;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.rail__label {
+  position: absolute;
+  inset-inline-start: calc(100% + 0.6rem);
+  padding: 0.3rem 0.6rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-4px);
+  transition: opacity 0.16s var(--ease), transform 0.16s var(--ease);
+}
+
+.rail__link:hover .rail__label,
+.rail__link:focus-visible .rail__label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.rail__theme {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  overflow: hidden;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.rail__theme:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Sélecteur de thème pour les écrans où le rail n'existe pas. */
+.theme-fab {
+  position: fixed;
+  inset-block-start: 0.85rem;
+  inset-inline-end: 0.85rem;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--text-muted);
+  overflow: hidden;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.theme-fab:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (min-width: 62rem) {
+  /* Au-dessus du point de rupture, le rail prend le relais. */
+  .theme-fab {
+    display: none;
+  }
+}
+
+.theme-toggle__icon {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  transition: transform 0.35s var(--ease), opacity 0.25s var(--ease);
+}
+
+[data-theme='light'] [data-theme-icon='light'],
+[data-theme='dark'] [data-theme-icon='dark'] {
+  opacity: 0;
+  transform: rotate(-70deg) scale(0.4);
+}
+
+[data-theme='light'] [data-theme-icon='dark'],
+[data-theme='dark'] [data-theme-icon='light'] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Boutons ────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: 100px;
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease),
+    border-color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--accent-on);
+}
+
+.btn--primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn--ghost {
+  border-color: var(--border-strong);
+  color: var(--text);
+  background: color-mix(in oklab, var(--surface) 55%, transparent);
+}
+
+.btn--ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn--lg {
+  padding: 0.85rem 1.5rem;
+  font-size: var(--step-0);
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: min(46rem, 100svh);
+  padding: clamp(4rem, 10vh, 7rem) var(--gutter) clamp(5rem, 9vh, 6rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero__terrain {
+  position: absolute;
+  inset: -12% -4% -6%;
+  z-index: -2;
+  color: var(--border-strong);
+  /* --border-strong a été assombri pour passer le contraste de 3:1 ; on
+     compense ici, sinon les courbes deviennent trop présentes. */
+  opacity: 0.3;
+  mask-image: radial-gradient(115% 92% at 78% 42%, #000 8%, transparent 72%);
+  animation: drift 34s ease-in-out infinite alternate;
+}
+
+.hero__terrain img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lueur de lave, derrière le monogramme : c'est la seule zone du site où la
+   couleur d'ambiance est orange. Partout ailleurs, l'accent reste le
+   bougainvillea des contrôles. */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset-block-start: -32%;
+  inset-inline-end: -6%;
+  z-index: -1;
+  width: 46rem;
+  height: 46rem;
+  background: radial-gradient(circle,
+    color-mix(in oklab, var(--lava) 20%, transparent) 0%,
+    color-mix(in oklab, var(--lava) 6%, transparent) 42%,
+    transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes drift {
+  from { transform: translate3d(-1.2%, 0.6%, 0) scale(1.02); }
+  to   { transform: translate3d(1.2%, -0.6%, 0) scale(1.06); }
+}
+
+/* Deux colonnes à partir du point de rupture du rail : le texte à gauche, le
+   monogramme à droite. */
+.hero__inner {
+  width: 100%;
+  max-width: 66rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 5vh, 3.5rem);
+  align-items: center;
+}
+
+@media (min-width: 62rem) {
+  .hero__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+/* ── Monogramme DT ──────────────────────────────────────────────────────── */
+
+.hero__mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(8rem, 22vw, 17rem);
+  aspect-ratio: 1;
+  justify-self: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 62% 34%,
+      color-mix(in oklab, var(--lava) 12%, transparent) 0%, transparent 68%),
+    var(--surface);
+  overflow: hidden;
+}
+
+/* Le terrain déborde volontairement du cadre : on lit un morceau de carte,
+   comme si on regardait la zone à travers une loupe. */
+.hero__mark-terrain {
+  position: absolute;
+  inset: -22%;
+  width: 144%;
+  height: 144%;
+  object-fit: cover;
+  color: var(--border-strong);
+  opacity: 0.55;
+}
+
+.hero__mark-initials {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+  color: var(--text);
+  text-shadow: 0 1px 0 color-mix(in oklab, var(--surface) 70%, transparent);
+  /* Les glyphes italiques débordent à droite : sans cette correction, le « DT »
+     paraît décalé d'environ 3 % du diamètre. Le décalage est en em pour
+     suivre la taille du texte. Valeur mesurée sur l'encre réelle du glyphe,
+     pas sur la boîte de ligne. */
+  transform: translateX(-0.09em);
+}
+
+/* Sous le point de rupture, le hero n'a pas la place : le monogramme devient
+   une marque discrète en haut à gauche, en face du sélecteur de thème. */
+@media (max-width: 61.99rem) {
+  .hero__mark {
+    position: fixed;
+    inset-block-start: 0.85rem;
+    inset-inline-start: 0.85rem;
+    z-index: 60;
+    width: 2.6rem;
+    justify-self: start;
+  }
+
+  .hero__mark-terrain {
+    inset: -30%;
+    width: 160%;
+    height: 160%;
+    opacity: 0.4;
+  }
+
+  .hero__mark-initials {
+    font-size: 1.05rem;
+    /* Le cercle est petit : la même correction en em paraîtrait trop forte. */
+    transform: translateX(-0.08em);
+  }
+}
+
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
+  color: var(--text-muted);
+}
+
+.hero__eyebrow-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 0.22rem color-mix(in oklab, var(--ok) 22%, transparent);
+}
+
+.hero__title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: clamp(1.4rem, 3vh, 2rem);
+}
+
+.hero__name {
+  font-size: var(--step-4);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+/* Le rôle change en boucle ; le curseur ne clignote que si JS est actif. */
+.hero__role {
+  min-height: 1.6em;
+  font-family: var(--font-body);
+  font-size: var(--step-1);
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0;
+  color: var(--text-muted);
+}
+
+.hero__role::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-inline-start: 0.15em;
+  translate: 0 0.16em;
+  background: var(--accent);
+  animation: blink 1.15s steps(2, start) infinite;
+}
+
+.hero[data-roles-static] .hero__role::after {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.hero__tagline {
+  max-width: 32rem;
+  font-size: var(--step-1);
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: clamp(1.8rem, 4vh, 2.6rem);
+}
+
+.hero__socials {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: clamp(1.8rem, 4vh, 2.4rem);
+}
+
+.social {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-muted);
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+
+.social:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.hero__foot {
+  position: absolute;
+  inset-block-end: clamp(1.2rem, 3vh, 2rem);
+  inset-inline: var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.hero__coords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  /* Laisse les coordonnées céder de la place : sans cela, elles repoussent la
+     flèche « Défiler » hors de l'écran sur les petits largeurs. */
+  flex: 1 1 12rem;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}
+
+.hero__scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+
+.hero__scroll:hover {
+  color: var(--accent);
+}
+
+.hero__scroll svg {
+  animation: nudge 2.4s var(--ease) infinite;
+}
+
+@keyframes nudge {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
+}
+
+/* ── Gabarit de section ─────────────────────────────────────────────────── */
+
+.section {
+  padding: clamp(4rem, 9vh, 7rem) var(--gutter);
+}
+
+.section--tint {
+  background: var(--bg-tint);
+  border-block: 1px solid var(--border);
+}
+
+/* Deux colonnes : l'index, puis le titre et son chapô. La colonne de droite
+   accueille les chiffres, quand la section en fournit. */
+.section-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 clamp(1rem, 3vw, 2rem);
+  align-items: start;
+  margin-bottom: clamp(2rem, 5vh, 3.5rem);
+}
+
+.section-head__index {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  padding-top: 0.35em;
+}
+
+/* Les chiffres occupent leur propre ligne tant que l'en-tête est sur deux
+   colonnes. Sans cela, la colonne `auto` s'élargit pour accueillir leurs
+   libellés sur une seule ligne et le titre se retrouve écrasé contre le bord. */
+.section-head__aside {
+  grid-column: 1 / -1;
+  margin-top: 1.4rem;
+}
+
+/* Cet ajustement doit venir APRÈS la règle de base : à spécificité égale,
+   c'est la dernière déclaration qui l'emporte, pas la dernière media query. */
+@media (min-width: 62rem) {
+  .section-head {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .section-head__aside {
+    grid-column: 3;
+    justify-self: end;
+    margin-top: 0;
+    padding-top: 0.5rem;
+  }
+}
+
+.section-head__body {
+  max-width: 40rem;
+}
+
+.section-head__title {
+  font-size: var(--step-3);
+}
+
+.section-head__lede {
+  max-width: 34rem;
+  margin-top: 0.9rem;
+  font-size: var(--step-0);
+  color: var(--text-muted);
+}
+
+.section__lede {
+  max-width: var(--measure);
+  margin-top: 1rem;
+  color: var(--text-muted);
+}
+
+.subhead {
+  margin-bottom: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ── À propos ───────────────────────────────────────────────────────────── */
+
+/* Chiffres clés : posés dans la colonne droite de l'en-tête de section, ils
+   ne consomment plus un bloc vertical à eux seuls. Sans boîte ni filet — ce
+   sont des repères éditoriaux, pas un composant d'interface. */
+.stats {
+  display: flex;
+  align-items: start;
+  gap: 0.75rem clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.2rem;
+}
+
+.stat__value {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.stat__label {
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+/* Tant que la colonne de droite n'existe pas, les trois chiffres se rangent
+   sur une ligne unique sous le chapô : ils tient dans la largeur du gutter. */
+@media (max-width: 55.99rem) {
+  .stats {
+    flex-wrap: wrap;
+  }
+}
+
+.about {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+
+@media (min-width: 56rem) {
+  .about {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    /* La fiche pratique s'étire sur la hauteur du récit : les deux colonnes
+       se terminent ensemble au lieu de laisser un vide sous la carte. */
+    align-items: stretch;
+  }
+
+  .facts {
+    align-content: space-between;
+  }
+}
+
+.about__bio > p {
+  max-width: var(--measure);
+  margin-bottom: 1.05rem;
+  color: var(--text-muted);
+}
+
+/* Le paragraphe d'ouverture, seul à passer au grade supérieur. L'interligne
+   resserré évite les sept lignes de grand texte qui écrasaient la colonne et
+   laissaient la fiche pratique bien plus haute en dessous. */
+.about__bio > p:first-child {
+  max-width: 32rem;
+  margin-bottom: 1.35rem;
+  font-size: var(--step-1);
+  line-height: 1.42;
+  color: var(--text);
+}
+
+/* Informations pratiques : une liste de définition, le libellé au-dessus de la
+   valeur. Elles répondent à des questions pratiques, pas au récit. */
+.facts {
+  display: grid;
+  gap: 1.1rem;
+  margin: 0;
+  padding: 1.4rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.fact__label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.fact__icon {
+  display: inline-grid;
+  place-items: center;
+  color: var(--accent);
+}
+
+.fact__value {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.4;
+}
+
+/* Parcours */
+
+.journey {
+  margin-top: clamp(2.75rem, 6vh, 4.5rem);
+}
+
+.timeline {
+  position: relative;
+  display: grid;
+  gap: 1.6rem;
+  padding-inline-start: 1.5rem;
+}
+
+/* Sous 64rem : ligne verticale, comme une frise classique. Le filet s'arrête
+   net au dernier cran plutôt que de s'effacer dans le fond — un dégradé qui
+   finit en transparent laissait les deux dernières étapes sans repère. */
+.timeline::before {
+  content: '';
+  position: absolute;
+  inset-block: 0.4rem;
+  inset-inline-start: 0;
+  width: 1px;
+  background: linear-gradient(var(--accent), var(--border) 3.5rem);
+}
+
+.timeline__item {
+  position: relative;
+}
+
+.timeline__item::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0.55em;
+  inset-inline-start: -1.5rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--accent);
+}
+
+/* La formation la plus récente porte le point plein : c'est le seul cran que
+   le lecteur cherche en premier, et le remplissage le distingue sans ajouter
+   de légende. */
+.timeline__item:first-child::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 4.5px var(--accent-wash);
+}
+
+/* ── Parcours en frise horizontale ────────────────────────────────────────
+
+   Sous 64rem la frise reste verticale. Au-dessus, les quatre formations se
+   rangent en colonnes : le texte gagne 2,5 fois de largeur, ce qui évite les
+   descriptions tronquées et les écoles qui débordent sur deux lignes.
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 64rem) {
+  .timeline {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.75rem;
+    padding-inline-start: 0;
+  }
+
+  .timeline::before {
+    inset-block: 0.3rem auto;
+    inset-inline: 0;
+    width: auto;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--border) 60%);
+  }
+
+  .timeline__item {
+    /* Le filet occupe le haut de la colonne : sans cette réserve, il
+       traverserait les années et le point masquerait le premier chiffre. */
+    display: flex;
+    flex-direction: column;
+    padding-block-start: 1.6rem;
+    padding-inline-start: 1.35rem;
+  }
+
+  /* Point centré sur le filet : 0,3rem (position du filet) moins la moitié
+     de 0,6rem (rayon du point). */
+  .timeline__item::before {
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    transform: translateY(-0.05rem);
+  }
+
+  .timeline__item:first-child::before {
+    /* Le halo du cran courant est omis ici : le texte de la colonne commence
+       1,6rem plus bas, l'anneau extérieur n'y toucherait pas. */
+    box-shadow: 0 0 0 3px var(--bg);
+  }
+}
+
+/* Années et niveau du diplôme sur une même ligne : deux informations de même
+   nature, avant le titre. */
+.timeline__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.55rem;
+}
+
+.timeline__years {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+/* Pastille du niveau d'étude.
+   Le teinte suit le niveau — neutre, lagon, bougainvillea — de sorte que la
+   progression du parcours se lise sans avoir à décoder chaque libellé. Ce n'est
+   pas un argument : la couleur porte l'information, pas la mise en valeur. */
+.timeline__level {
+  padding: 0.16rem 0.6rem;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1.35;
+  white-space: nowrap;
+  background: var(--badge-1-bg);
+  color: var(--badge-1-fg);
+}
+
+.timeline__level--2 {
+  background: var(--badge-2-bg);
+  color: var(--badge-2-fg);
+}
+
+.timeline__level--3 {
+  background: var(--badge-3-bg);
+  color: var(--badge-3-fg);
+}
+
+.timeline__title {
+  margin-top: 0.15rem;
+  font-size: var(--step-1);
+}
+
+/* L'école n'est pas un lien : elle était colorée comme tel, ce qui promettait
+   une navigation qui n'existe pas. Elle passe en texte discret, entre le
+   diplôme et la description. */
+.timeline__place {
+  font-size: 0.86rem;
+  color: var(--text-faint);
+}
+
+.timeline__desc {
+  margin-top: 0.45rem;
+  /* Sans cette limite, les lignes du parcours atteignent le bord de la colonne
+     et la lecture devient pénible. */
+  max-width: 30rem;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+/* Passions — trois blocs séparés par des filets, sans carte ni ombre : ce sont
+   des notes, pas des modules d'interface. */
+
+.passions {
+  margin-top: clamp(2.75rem, 6vh, 4.5rem);
+}
+
+/* Colonnes explicites plutôt qu'un `auto-fit` : ce dernier calculait cinq
+   pistes à cette largeur et en effondlait deux, ce qui déplaçait les filets
+   d'une version à l'autre du rendu. */
+.passions__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--border);
+  border-block: 1px solid var(--border);
+}
+
+@media (min-width: 34rem) {
+  .passions__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* En deux colonnes, un nombre impair de blocs laisse une case vide — et la
+   couleur de fond de la grille y apparaîtrait en aplat gris. Le dernier bloc
+   impari occupe donc toute la largeur. Les autres largeurs n'ont pas de case
+   vide à combler. */
+@media (min-width: 34rem) and (max-width: 63.99rem) {
+  .passion:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 64rem) {
+  .passions__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.passion {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 1.5rem clamp(1.25rem, 2.5vw, 1.75rem);
+  background: var(--bg);
+  transition: background 0.25s var(--ease);
+}
+
+.passion:hover {
+  background: var(--surface);
+}
+
+.passion__title {
+  font-size: var(--step-1);
+  margin-bottom: 0.5rem;
+}
+
+.passion__desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+/* Les mots-clés descendent au bas de chaque colonne : les trois blocs se
+   terminent donc sur la même ligne, quelle que soit la longueur du texte. */
+.passion .pills {
+  margin-top: auto;
+}
+
+/* ── Pastilles ──────────────────────────────────────────────────────────── */
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.pill {
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: color-mix(in oklab, var(--surface) 60%, transparent);
+  white-space: nowrap;
+}
+
+/* ── Compétences : trois bandeaux ───────────────────────────────────────────
+
+   Un bandeau pleine largeur par groupe. La grille à onglets d'avant montrait
+   un groupe sur trois et enterrait les deux autres ; ici tout est visible, et
+   les bandes partagent le même gabarit que la section « À propos » : un rail
+   de titre à gauche, le contenu à droite.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.bands {
+  display: grid;
+  gap: clamp(2.25rem, 5vh, 3.25rem);
+}
+
+.band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  padding-block-start: 1.4rem;
+  border-block-start: 1px solid var(--border-strong);
+}
+
+@media (min-width: 62rem) {
+  .band {
+    grid-template-columns: minmax(13rem, 18rem) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+
+/* Le rail de titre reste en haut pendant qu'on parcourt la liste des
+   compétences : on sait toujours quel groupe on lit. */
+@media (min-width: 62rem) {
+  .band__head {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+  }
+}
+
+.band__title {
+  font-size: var(--step-1);
+}
+
+.band__count {
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.band__summary {
+  margin-top: 0.7rem;
+  max-width: 26rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* Une compétence = une ligne : le nom à gauche, la barre à droite. Plus de
+   description ni d'année, la ligne tient donc sur une seule hauteur. */
+.skill {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.6rem;
+  border-block-start: 1px solid var(--border);
+}
+
+/* La barre se cale sur la ligne de base du nom : `baseline` l'alignerait sur
+   celle d'un caractère vide, ce qui la faisait descendre sous le texte. */
+.skill__level {
+  flex: none;
+  position: relative;
+  top: -0.28em;
+}
+
+/* La liste ne porte que le trait du bas : le trait du haut est celui du
+   bandeau, et le premier filet de compétence le doubletrait sinon. */
+.band__list {
+  border-block-end: 1px solid var(--border);
+}
+
+.band__list > .skill:first-child {
+  border-block-start: 0;
+}
+
+.skill__name {
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+/* La barre de niveau : un filet continu dont la partie colorée vaut le
+   niveau sur 3. Elle remplace les trois tirets d'avant, illisibles. */
+.skill__level {
+  width: 4.5rem;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border-strong);
+  overflow: hidden;
+}
+
+.skill__level::before {
+  content: '';
+  display: block;
+  width: calc(var(--niveau, 1) / 3 * 100%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+}
+
+/* ── Filtres ────────────────────────────────────────────────────────────── */
+
+.filters {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem clamp(1rem, 2.5vw, 1.5rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.filters__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.filters__legend {
+  flex: none;
+  width: 100%;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: var(--bg-tint);
+}
+
+.segmented__item {
+  padding: 0.32rem 0.85rem;
+  border: 0;
+  border-radius: 100px;
+  background: transparent;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  transition: background 0.18s var(--ease), color 0.18s var(--ease);
+}
+
+.segmented__item:hover {
+  color: var(--text);
+  background: color-mix(in oklab, var(--border) 45%, transparent);
+}
+
+.segmented__item.is-selected {
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip {
+  padding: 0.28rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  transition: color 0.18s var(--ease), border-color 0.18s var(--ease),
+    background 0.18s var(--ease);
+}
+
+.chip:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.chip.is-selected {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  font-weight: 600;
+}
+
+/* Le compteur se place au-dessus de la grille qu'il annonce. */
+.filters__count {
+  margin: 1.75rem 0 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.filters__count strong {
+  color: var(--text);
+}
+
+/* Barre de chargement HTMX : visible seulement pendant une requête. */
+.loader {
+  height: 2px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border-radius: 2px;
+  background: transparent;
+}
+
+.loader__bar {
+  display: block;
+  width: 40%;
+  height: 100%;
+  background: var(--accent);
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.loader.htmx-request .loader__bar {
+  opacity: 1;
+  animation: slide 0.9s var(--ease) infinite;
+}
+
+@keyframes slide {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(250%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader.htmx-request .loader__bar {
+    animation: pulse 1.1s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    50% { opacity: 0.3; }
+  }
+}
+
+/* ── Grille de projets ──────────────────────────────────────────────────── */
+
+.grid__inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+.card:focus-within {
+  border-color: var(--accent);
+}
+
+.card__frame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: var(--bg-tint);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* `cover` ancré en haut : les captures ont des hauteurs très variées (442 à
+   789 px pour 1000 de large). Les rogner donne une grille régulière ; la
+   partie haute d'une interface — bandeau, titre — est ce qui identifie le
+   mieux le projet. L'image complète est visible dans la fiche détaillée. */
+.card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.4s var(--ease);
+}
+
+.card:hover .card__image {
+  transform: scale(1.03);
+}
+
+.card__image--empty {
+  display: grid;
+  place-items: center;
+  color: var(--text-faint);
+}
+
+.card__badge {
+  position: absolute;
+  inset-block-start: 0.6rem;
+  inset-inline-end: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 100px;
+  background: color-mix(in oklab, var(--surface-2) 88%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--text-muted);
+}
+
+.card__badge .dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--text-faint);
+}
+
+.card__badge--actif {
+  color: var(--ok);
+  border-color: color-mix(in oklab, var(--ok) 35%, transparent);
+}
+
+.card__badge--actif .dot {
+  background: var(--ok);
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.1rem 1.2rem 1.25rem;
+}
+
+.card__meta {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.card__title {
+  font-size: var(--step-1);
+}
+
+.card__title a {
+  text-decoration: none;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s var(--ease), color 0.2s var(--ease);
+}
+
+.card__title a:hover,
+.card__title a:focus-visible {
+  color: var(--accent);
+  background-size: 100% 1.5px;
+}
+
+.card__summary {
+  flex: 1;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* Pagination */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.pagination__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.pagination__step:hover {
+  color: var(--accent);
+}
+
+.pagination__step.is-off {
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+.pagination__status {
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  color: var(--text-faint);
+}
+
+/* Aucun résultat : ce n'est pas une erreur, c'est une piste. */
+
+.empty {
+  padding: clamp(2.5rem, 6vw, 4rem) 1.5rem;
+  text-align: center;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+}
+
+.empty__title {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  margin-bottom: 0.4rem;
+}
+
+.empty__text {
+  max-width: 28rem;
+  margin: 0 auto 1.5rem;
+  color: var(--text-muted);
+}
+
+/* ── Modale projet ──────────────────────────────────────────────────────── */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(760px, calc(100vw - 2rem));
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.modal::backdrop {
+  background: color-mix(in oklab, #000 55%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: inline-flex;
+  padding: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.modal__close:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+/* Dans la modale, la fiche perd son cadre : la modale est déjà le cadre. */
+.modal .fiche {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  animation: fiche-in 0.25s var(--ease) both;
+}
+
+/* ── Fiche projet ───────────────────────────────────────────────────────── */
+
+.fiche-zone:empty {
+  display: none;
+}
+
+.fiche {
+  display: grid;
+  gap: 1.75rem;
+  margin-top: 2rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--border);
+  border-inline-start: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  animation: fiche-in 0.35s var(--ease) both;
+}
+
+@keyframes fiche-in {
+  from { opacity: 0; transform: translateY(8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fiche {
+    animation: none;
+  }
+}
+
+.fiche__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}
+
+.fiche__status {
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+}
+
+.fiche__status--actif {
+  color: var(--ok);
+  border-color: color-mix(in oklab, var(--ok) 35%, transparent);
+  background: var(--ok-wash);
+}
+
+.fiche__title {
+  font-size: var(--step-2);
+  margin-bottom: 0.5rem;
+}
+
+.fiche__summary {
+  max-width: var(--measure);
+  color: var(--text-muted);
+}
+
+.fiche__links,
+.version__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* Capture entière : pas de recadrage, la bordure marque simplement la limite
+   du visuel. */
+.fiche__shot {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-tint);
+  overflow: hidden;
+}
+
+.fiche__shot img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.fiche__shot figcaption {
+  padding: 0.5rem 0.8rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-faint);
+}
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text);
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+
+.icon-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+/* Historique des versions */
+
+.versions {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.versions__list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.version {
+  display: grid;
+  gap: 0.6rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 1px solid var(--border);
+}
+
+.version__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.version__label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.version__head time {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-faint);
+}
+
+.version__changes {
+  display: grid;
+  gap: 0.2rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.version__changes li {
+  position: relative;
+  padding-inline-start: 0.9rem;
+}
+
+.version__changes li::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0.72em;
+  inset-inline-start: 0;
+  width: 0.35rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* ── Contact ────────────────────────────────────────────────────────────── */
+
+.contact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+
+@media (min-width: 54rem) {
+  .contact {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+.contact__title {
+  font-size: var(--step-2);
+  margin-bottom: 0.75rem;
+}
+
+.contact__text {
+  max-width: 26rem;
+  margin-bottom: 1.75rem;
+  color: var(--text-muted);
+}
+
+.contact__list {
+  display: grid;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.contact__item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--bg-tint);
+  text-decoration: none;
+  transition: background 0.2s var(--ease);
+}
+
+.contact__item:hover {
+  background: var(--surface);
+}
+
+.contact__item:hover .contact__icon {
+  color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.contact__icon {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-muted);
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.contact__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.contact__label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.contact__value {
+  font-size: 0.88rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Pied de page / colophon ────────────────────────────────────────────── */
+
+.footer {
+  padding: clamp(2.5rem, 6vh, 4rem) var(--gutter) clamp(2rem, 4vh, 3rem);
+  border-top: 1px solid var(--border);
+  background: var(--bg-tint);
+}
+
+.footer__label {
+  margin-bottom: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.footer__tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.footer__tools li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.75rem 0.95rem;
+  background: var(--bg);
+}
+
+.footer__tools strong {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.footer__tools span {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+
+/* ── Pages projet et erreurs ────────────────────────────────────────────── */
+
+.project-page,
+.error-page {
+  padding: clamp(2rem, 5vh, 4rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+  min-height: 100svh;
+}
+
+.project-page {
+  max-width: 56rem;
+}
+
+.project-page__back a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.project-page__back a:hover {
+  color: var(--accent);
+}
+
+.project-page__siblings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.sibling {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: border-color 0.2s var(--ease);
+}
+
+.sibling:hover {
+  border-color: var(--accent);
+}
+
+.sibling--next {
+  text-align: right;
+}
+
+.sibling__label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.sibling__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.error-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 40rem;
+}
+
+.error-page__code {
+  font-family: var(--font-mono);
+  font-size: clamp(3rem, 12vw, 6rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.28;
+}
+
+.error-page__title {
+  font-size: var(--step-3);
+  margin: 0.5rem 0 0.75rem;
+}
+
+.error-page__text {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.error-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* ── Fine couche de mouvement global ────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero__terrain,
+  .hero__scroll svg {
+    animation: none;
+  }
+}
+
+/* ── Impression : on retire le chrome, on garde le contenu ──────────────── */
+
+@media print {
+  .rail,
+  .skip-link,
+  .hero__terrain,
+  .hero::after,
+  .filters,
+  .loader,
+  .pagination,
+  .hero__scroll,
+  .footer__tools {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .shell {
+    padding: 0;
+  }
+
+  .section,
+  .hero {
+    padding: 1.5rem 0;
+    min-height: 0;
+  }
+
+  .card,
+  .fiche {
+    break-inside: avoid;
+  }
+}
