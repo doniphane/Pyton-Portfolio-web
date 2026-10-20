@@ -103,6 +103,13 @@
       <p class="card__meta">
         <time datetime="{{ project.date.isoformat() }}">{{ project.date|month_year }}</time>
       </p>
+      {% set latest = project.latest_version %}
+      {% if latest %}
+        <p class="card__update">
+          {{ icon('sparkle', size=11) }}
+          <span>Dernière mise à jour {{ latest.date|month_year }}</span>
+        </p>
+      {% endif %}
       <h3 class="card__title">
         {#- Vrai lien : sans JavaScript il ouvre la page projet complète ; avec
             HTMX il injecte la fiche sous la grille (voir hx-get). -#}

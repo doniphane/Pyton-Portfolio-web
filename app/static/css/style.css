@@ -1555,6 +1555,21 @@ ul, ol {
   color: var(--text-faint);
 }
 
+.card__update {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 100px;
+  background: var(--accent-wash);
+  border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  line-height: 1.4;
+  color: var(--accent);
+}
+
 .card__title {
   font-size: var(--step-1);
 }

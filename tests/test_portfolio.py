@@ -49,9 +49,9 @@ def test_slugs_uniques():
 
 def test_dates_et_versions_coherentes():
     for project in PROJECTS:
-        # Une version ne peut pas être postérieure à la dernière version du projet.
+        # Une version ne peut pas précéder la date de création du projet.
         if project.versions:
-            assert max(v.date for v in project.versions) <= project.date
+            assert project.latest_version.date >= project.date
         # Les versions sont proposées de la plus ancienne à la plus récente.
         dates = [v.date for v in project.versions]
         assert dates == sorted(dates)

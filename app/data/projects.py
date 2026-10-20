@@ -61,6 +61,11 @@ class Project:
         return "En ligne" if self.status == "actif" else "Archivé"
 
     @property
+    def latest_version(self) -> Version | None:
+        """Version la plus récente de l'historique, s'il existe."""
+        return max(self.versions, key=lambda version: version.date, default=None)
+
+    @property
     def links(self) -> tuple[tuple[str, str, str], ...]:
         """(libellé, url, icône) pour chaque lien externe du projet."""
         out: list[tuple[str, str, str]] = []
@@ -391,12 +396,12 @@ PROJECTS: tuple[Project, ...] = (
             "Bibliothèque virtuelle construite sur l'API OpenLibrary : recherche "
             "d'ouvrages, couverture et fiche détaillée."
         ),
-        technologies=("HTML", "CSS", "JavaScript"),
+        technologies=("React", "CSS", "JavaScript"),
         date=_d("2023-11-15"),
         status="actif",
         image="openlibrary.webp",
         url="https://doniphane.github.io/Ma-bibliotheque/",
-        repo="https://github.com/doniphane/Ma-bibliotheque",
+        repo="https://github.com/doniphane/openlibrary/",
         versions=(
             Version(
                 label="v1.0",
@@ -408,6 +413,17 @@ PROJECTS: tuple[Project, ...] = (
                     "Interface de consultation",
                 ),
                 technologies=("HTML", "CSS", "JavaScript"),
+                url="https://doniphane.github.io/Ma-bibliotheque/",
+                repo="https://github.com/doniphane/Ma-bibliotheque",
+            ),
+            Version(
+                label="v2.0",
+                date=_d("2026-10-01"),
+                changes=(
+                    "Refonte de toute l'UI/UX du site",
+                    "Mise à jour de React vers la dernière version",
+                ),
+                technologies=("React", "CSS", "JavaScript"),
                 url="https://doniphane.github.io/Ma-bibliotheque/",
                 repo="https://github.com/doniphane/Ma-bibliotheque",
             ),
